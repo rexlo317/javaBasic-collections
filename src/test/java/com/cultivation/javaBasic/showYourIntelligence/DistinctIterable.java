@@ -1,8 +1,8 @@
 package com.cultivation.javaBasic.showYourIntelligence;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class DistinctIterable<T> implements Iterable<T> {
     private Iterable<T> iterable;
@@ -26,21 +26,41 @@ public class DistinctIterable<T> implements Iterable<T> {
 class DistinctIterator<E> implements Iterator<E> {
     // TODO: Implement the class to pass the test. Note that you cannot put all items into memory or you will fail.
     // <--start
-    @SuppressWarnings({"FieldCanBeLocal", "unused"})
-    private final Iterator<E> iterator;
 
+    private final Iterator<E> iterator;
+    private E value[] =  (E[])new Object[50];
+    private int count = 0;
+    private boolean check = false;
     DistinctIterator(Iterator<E> iterator) {
         this.iterator = iterator;
+        this.value[count] = iterator.next();
     }
 
     @Override
     public boolean hasNext() {
-        throw new NotImplementedException();
+        return iterator.hasNext();
+        //throw new NotImplementedException();
     }
 
     @Override
-    public E next() {
-        throw new NotImplementedException();
+    public E next(){
+        E temp = iterator.next();
+        while (iterator.hasNext() && check == false) {
+            //System.out.println(value[count] + " " + temp);
+            for (int i = 0; i <= count; i++) {
+                if (value[i] != temp)
+                    check = false;
+                else {
+                    check = true;
+                    break;
+                }
+                temp = iterator.next();
+            }
+        }
+        check = false;
+        value[count] = temp;
+        return temp;
+        //throw new NotImplementedException();
     }
     // --end->
 }
