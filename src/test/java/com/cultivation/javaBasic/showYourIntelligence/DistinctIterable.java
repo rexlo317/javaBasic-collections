@@ -28,12 +28,15 @@ class DistinctIterator<E> implements Iterator<E> {
     // <--start
 
     private final Iterator<E> iterator;
-    private E value[] =  (E[])new Object[50];
-    private int count = 0;
-    private boolean check = false;
+    List<E> values =  new ArrayList<>();
+
     DistinctIterator(Iterator<E> iterator) {
-        this.iterator = iterator;
-        this.value[count] = iterator.next();
+        while (iterator.hasNext()) {
+            E value = iterator.next();
+            if (!values.contains(value))
+                values.add(value);
+        }
+        this.iterator = values.iterator();
     }
 
     @Override
@@ -45,20 +48,6 @@ class DistinctIterator<E> implements Iterator<E> {
     @Override
     public E next(){
         E temp = iterator.next();
-        while (iterator.hasNext() && check == false) {
-            //System.out.println(value[count] + " " + temp);
-            for (int i = 0; i <= count; i++) {
-                if (value[i] != temp)
-                    check = false;
-                else {
-                    check = true;
-                    break;
-                }
-                temp = iterator.next();
-            }
-        }
-        check = false;
-        value[count] = temp;
         return temp;
         //throw new NotImplementedException();
     }
